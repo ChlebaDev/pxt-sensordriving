@@ -4,7 +4,7 @@ radio.setGroup(112)
 
 let s1 = new Servo(PCAmotor.Servos.S1, 550, 2700, 1650, 10)
 let spidx = .50
-let autoModeEnabled = false
+let autoModeEnabled = true
 let whiteLine = 0
 
 const pinC = DigitalPin.P15
@@ -17,3 +17,21 @@ pins.setPull(pinR, PinPullMode.PullNone)
 
 s1.stop()
 
+basic.forever(function () {
+  if (autoModeEnabled) {
+      let c = (whiteLine ^ pins.digitalReadPin(pinC)) == 0 ? false : true
+      let l = (whiteLine ^ pins.digitalReadPin(pinL)) == 0 ? false : true
+      let r = (whiteLine ^ pins.digitalReadPin(pinR)) == 0 ? false : true
+        
+        if (c) {
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, 200)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, -200)
+        } else if (l) {
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, -200)
+        } else if (r) {
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, 200)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, -100)
+        }
+  }
+})
